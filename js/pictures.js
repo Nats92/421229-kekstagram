@@ -127,7 +127,7 @@ function onEnterPress(evt) {
     galleryOverlay.querySelector('.comments-count').textContent = comment.childNodes[0].data;
 
     document.addEventListener('keydown', onEscPress);
-    galleryOverlayClose.addEventListener('keydown', onEnterClosePress);
+    galleryOverlayClose.addEventListener('keydown', onCloseClick);
   }
 }
 
