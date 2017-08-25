@@ -77,38 +77,40 @@ function createArrayOfDescriptions() {
   return photoDescriptions;
 }
 
-var picturesList = document.querySelector('.pictures');
+var photoTemplate = document.querySelector('#picture-template').content;
+var descriptions = createArrayOfDescriptions();
 
-function createPhotosByTemplate() {
-  var photoTemplate = document.querySelector('#picture-template').content;
-  var descriptions = createArrayOfDescriptions();
-
-  function createNewPhoto(description) {
-    var newPhoto = photoTemplate.cloneNode(true);
-    newPhoto.querySelector('img').setAttribute('src', description.url);
-    newPhoto.querySelector('.picture-likes').textContent = description.likes;
-    newPhoto.querySelector('.picture-comments').textContent = createRandomLengthArray().length;
-    return newPhoto;
-  }
-
-  var fragment = document.createDocumentFragment();
-  for (var i = 0; i < descriptions.length; i++) {
-    fragment.appendChild(createNewPhoto(descriptions[i]));
-  }
-  picturesList.appendChild(fragment);
+// создание картинки по образцу
+function createNewPhoto(description) {
+  var newPhoto = photoTemplate.cloneNode(true);
+  newPhoto.querySelector('img').setAttribute('src', description.url);
+  newPhoto.querySelector('.picture-likes').textContent = description.likes;
+  newPhoto.querySelector('.picture-comments').textContent = createRandomLengthArray().length;
+  return newPhoto;
 }
 
-createPhotosByTemplate();
-
+var picturesList = document.querySelector('.pictures');
 var galleryOverlay = document.querySelector('.gallery-overlay');
 var galleryOverlayClose = galleryOverlay.querySelector('.gallery-overlay-close');
 
-document.querySelector('.upload-overlay').classList.add('hidden');
+// Выведение картинок на страницу
+var fragment = document.createDocumentFragment();
+for (var i = 0; i < descriptions.length; i++) {
+  fragment.appendChild(createNewPhoto(descriptions[i]));
+}
+picturesList.appendChild(fragment);
 
 function onEscPress(evt) {
   if (evt.keyCode === KEY_CODES.ESC) {
     onCloseClick();
   }
+}
+function onEnterPress(evt) {
+  openPicture(evt);
+}
+
+function onPictureClick(evt) {
+  openPicture(evt);
 }
 
 function onCloseClick() {
@@ -116,38 +118,32 @@ function onCloseClick() {
   document.removeEventListener('keydown', onEscPress);
 }
 
-function onEnterPress(evt) {
-  if (evt.keyCode === KEY_CODES.ENTER) {
-    evt.preventDefault();
-    galleryOverlay.classList.remove('hidden');
-    var like = evt.target.querySelector('.picture-likes');
-    var comment = evt.target.querySelector('.picture-comments');
-    galleryOverlay.querySelector('.gallery-overlay-image').setAttribute('src', evt.target.querySelector('img').getAttribute('src'));
-    galleryOverlay.querySelector('.likes-count').textContent = like.childNodes[0].data;
-    galleryOverlay.querySelector('.comments-count').textContent = comment.childNodes[0].data;
-
-    document.addEventListener('keydown', onEscPress);
-    galleryOverlayClose.addEventListener('keydown', onCloseClick);
-  }
-}
-
-function onPictureClick(evt) {
+function openPicture(evt) {
   evt.preventDefault();
-  galleryOverlay.classList.remove('hidden');
-  var like = evt.target.parentElement.querySelector('.picture-likes');
-  var comment = evt.target.parentElement.querySelector('.picture-comments');
-  galleryOverlay.querySelector('.gallery-overlay-image').setAttribute('src', evt.target.getAttribute('src'));
+  var target = (evt.type === 'keydown') ? evt.target : evt.target.parentElement;
+  var like = target.querySelector('.picture-likes');
+  var comment = target.querySelector('.picture-comments');
+  galleryOverlay.querySelector('.gallery-overlay-image').setAttribute('src', target.querySelector('img').getAttribute('src'));
   galleryOverlay.querySelector('.likes-count').textContent = like.childNodes[0].data;
   galleryOverlay.querySelector('.comments-count').textContent = comment.childNodes[0].data;
 
+  galleryOverlay.classList.remove('hidden');
   document.addEventListener('keydown', onEscPress);
   galleryOverlayClose.addEventListener('keydown', function () {
     if (evt.keyCode === KEY_CODES.ENTER) {
       onCloseClick();
     }
   });
+  galleryOverlayClose.addEventListener('click', onCloseClick);
 }
 
-picturesList.addEventListener('click', onPictureClick);
-picturesList.addEventListener('keydown', onEnterPress);
-galleryOverlayClose.addEventListener('click', onCloseClick);
+function addHandlers() {
+  picturesList.addEventListener('click', onPictureClick);
+  picturesList.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === KEY_CODES.ENTER) {
+      onEnterPress(evt);
+    }
+  });
+}
+
+addHandlers();
