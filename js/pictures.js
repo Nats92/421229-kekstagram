@@ -93,12 +93,14 @@ var picturesList = document.querySelector('.pictures');
 var galleryOverlay = document.querySelector('.gallery-overlay');
 var galleryOverlayClose = galleryOverlay.querySelector('.gallery-overlay-close');
 
+document.querySelector('.upload-overlay').classList.add('hidden');
 // Выведение картинок на страницу
 var fragment = document.createDocumentFragment();
 for (var i = 0; i < descriptions.length; i++) {
   fragment.appendChild(createNewPhoto(descriptions[i]));
 }
 picturesList.appendChild(fragment);
+
 
 function onEscPress(evt) {
   if (evt.keyCode === KEY_CODES.ESC) {
@@ -147,3 +149,35 @@ function addHandlers() {
 }
 
 addHandlers();
+
+var uploadFile = document.querySelector('#upload-file');
+var uploadOverlay = document.querySelector('.upload-overlay');
+
+function onEscapePress(evt) {
+  if ((evt.keyCode === KEY_CODES.ESC) && (evt.target.className !== 'upload-form-description')) {
+    closeFraming();
+  }
+}
+
+var uploadFormCancel = document.querySelector('.upload-form-cancel');
+function openFraming() {
+  uploadFile.classList.add('hidden');
+  uploadOverlay.classList.remove('hidden');
+  document.addEventListener('keydown', onEscapePress);
+  uploadFormCancel.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === KEY_CODES.ENTER) {
+      closeFraming();
+    }
+  });
+}
+
+function closeFraming() {
+  uploadOverlay.classList.add('hidden');
+  uploadFile.classList.remove('hidden');
+  document.removeEventListener('keydown', onEscapePress);
+  uploadFormCancel.removeEventListener('keydown', closeFraming);
+}
+
+uploadFile.addEventListener('change', openFraming);
+uploadFormCancel.addEventListener('click', closeFraming);
+document.querySelector('.upload-form-cancel').addEventListener('click', closeFraming);
