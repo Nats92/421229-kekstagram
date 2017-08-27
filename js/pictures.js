@@ -1,5 +1,8 @@
 'use strict';
 
+var MIN_PICTURE_SIZE = 25;
+var MAX_PICTURE_SIZE = 100;
+
 // массив комментариев
 var PHOTO_COMMENTS = [
   'Всё отлично!',
@@ -181,3 +184,37 @@ function closeFraming() {
 uploadFile.addEventListener('change', openFraming);
 uploadFormCancel.addEventListener('click', closeFraming);
 document.querySelector('.upload-form-cancel').addEventListener('click', closeFraming);
+
+var valueButton = uploadOverlay.querySelector('.upload-resize-controls-value');
+var step = 25;
+var valueNumber = Number(valueButton.value.replace('%', ''));
+
+
+function increaseSizeValue() {
+  if (valueNumber >= MIN_PICTURE_SIZE && valueNumber < MAX_PICTURE_SIZE) {
+    valueNumber += step;
+  }
+  if (valueNumber > MAX_PICTURE_SIZE) {
+    valueNumber = MAX_PICTURE_SIZE;
+  }
+  return valueButton.setAttribute('value', valueNumber + '%');
+}
+
+function decreaseSizeValue() {
+  if (valueNumber > MIN_PICTURE_SIZE && valueNumber <= MAX_PICTURE_SIZE) {
+    valueNumber -= step;
+  }
+  if (valueNumber < MIN_PICTURE_SIZE) {
+    valueNumber = MIN_PICTURE_SIZE;
+  }
+  return valueButton.setAttribute('value', valueNumber + '%');
+}
+
+(function manageResize() {
+  var incButton = uploadOverlay.querySelector('.upload-resize-controls-button-inc');
+  var decButton = uploadOverlay.querySelector('.upload-resize-controls-button-dec');
+  incButton.addEventListener('click', increaseSizeValue);
+  decButton.addEventListener('click', decreaseSizeValue);
+})();
+
+
