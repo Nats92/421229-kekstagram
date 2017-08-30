@@ -1,8 +1,5 @@
 'use strict';
 
-var MIN_PICTURE_SIZE = 25;
-var MAX_PICTURE_SIZE = 100;
-
 // массив комментариев
 var PHOTO_COMMENTS = [
   'Всё отлично!',
@@ -142,16 +139,14 @@ function openPicture(evt) {
   galleryOverlayClose.addEventListener('click', onCloseClick);
 }
 
-function addHandlers() {
+(function addHandlers() {
   picturesList.addEventListener('click', onPictureClick);
   picturesList.addEventListener('keydown', function (evt) {
     if (evt.keyCode === KEY_CODES.ENTER) {
       onEnterPress(evt);
     }
   });
-}
-
-addHandlers();
+})();
 
 var uploadFile = document.querySelector('#upload-file');
 var uploadOverlay = document.querySelector('.upload-overlay');
@@ -181,31 +176,39 @@ function closeFraming() {
   uploadFormCancel.removeEventListener('keydown', closeFraming);
 }
 
-uploadFile.addEventListener('change', openFraming);
-uploadFormCancel.addEventListener('click', closeFraming);
-document.querySelector('.upload-form-cancel').addEventListener('click', closeFraming);
+(function manageFraming() {
+  uploadFile.addEventListener('change', openFraming);
+  uploadFormCancel.addEventListener('click', closeFraming);
+  document.querySelector('.upload-form-cancel').addEventListener('click', closeFraming);
+})();
 
 var valueButton = uploadOverlay.querySelector('.upload-resize-controls-value');
-var step = 25;
 var valueNumber = Number(valueButton.value.replace('%', ''));
+var step = Number(valueButton.getAttribute('step'));
+var minSize = Number(valueButton.getAttribute('minlength'));
+var maxSize = Number(valueButton.getAttribute('maxlength'));
+var effectImgPreview = document.querySelector('.effect-image-preview');
 
-
-function increaseSizeValue() {
-  if (valueNumber >= MIN_PICTURE_SIZE && valueNumber < MAX_PICTURE_SIZE) {
+function onIncreaseClick() {
+  if (valueNumber >= minSize && valueNumber < maxSize) {
     valueNumber += step;
+    effectImgPreview.style = 'transform: scale(' + valueNumber / 100 + ')';
   }
-  if (valueNumber > MAX_PICTURE_SIZE) {
-    valueNumber = MAX_PICTURE_SIZE;
+  if (valueNumber > maxSize) {
+    valueNumber = maxSize;
+    effectImgPreview.style = 'transform: scale(1)';
   }
   return valueButton.setAttribute('value', valueNumber + '%');
 }
 
-function decreaseSizeValue() {
-  if (valueNumber > MIN_PICTURE_SIZE && valueNumber <= MAX_PICTURE_SIZE) {
+function onDecreaseClick() {
+  if (valueNumber > minSize && valueNumber <= maxSize) {
     valueNumber -= step;
+    effectImgPreview.style = ('transform: scale(' + valueNumber / 100 + ')');
   }
-  if (valueNumber < MIN_PICTURE_SIZE) {
-    valueNumber = MIN_PICTURE_SIZE;
+  if (valueNumber < minSize) {
+    valueNumber = minSize;
+    effectImgPreview.style = 'transform: scale(0.25)';
   }
   return valueButton.setAttribute('value', valueNumber + '%');
 }
@@ -213,8 +216,92 @@ function decreaseSizeValue() {
 (function manageResize() {
   var incButton = uploadOverlay.querySelector('.upload-resize-controls-button-inc');
   var decButton = uploadOverlay.querySelector('.upload-resize-controls-button-dec');
-  incButton.addEventListener('click', increaseSizeValue);
-  decButton.addEventListener('click', decreaseSizeValue);
+  incButton.addEventListener('click', onIncreaseClick);
+  decButton.addEventListener('click', onDecreaseClick);
 })();
 
+function onFilterClick(evt) {
+  effectImgPreview.removeAttribute('class');
+  effectImgPreview.setAttribute('class', 'effect-image-preview');
+  var name = evt.target.parentElement.htmlFor.replace('upload-', '');
+  effectImgPreview.classList.add(name);
+}
+
+(function addHandler() {
+  var uploadEffectPreview = document.querySelectorAll('.upload-effect-preview');
+  for (var j = 0; j < uploadEffectPreview.length; j++) {
+    uploadEffectPreview[j].addEventListener('click', onFilterClick);
+  }
+})();
+
+var uploadForm = document.getElementById('upload-select-image');
+
+uploadForm.addEventListener('input', function (evt) {
+  var errors = [];
+  var hashtag = document.querySelector('.upload-form-hashtags');
+  var tagsParsed = hashtag.value.split(' ');
+  var formDescription = document.querySelector('.upload-form-description');
+
+  function testUnique(items) {
+    for (var a = 0; a < items.length - 1; a++) {
+      for (var b = a + 1; b < items.length; b++) {
+        if (items[a] === items[b]) {
+          return false;
+        }
+      }
+    } return true;
+  }
+
+  if (tagsParsed.length === 0 || (tagsParsed.length === 1 && tagsParsed[0] === '')) {
+    return;
+  }
+
+  if (tagsParsed.some(function (item) {
+    return item.match(/#.{0,20}\S#/);
+  })) {
+    errors.push('Необходимо разделять хэш-теги "пробелом".');
+  }
+
+  if (hashtag.value.match(/(#[A-zА-яЁё0-9\s]{0,20}){6,}/)) {
+    errors.push('Нельзя указать больше пяти хэш-тегов.');
+  }
+
+  if (tagsParsed.some(function (item) {
+    return item.length > 21;
+  })) {
+    errors.push('Максимальная длина одного хэш-тега 20 символов.');
+  }
+
+  if (!testUnique(tagsParsed)) {
+    errors.push('Один и тот же хэш-тег не может быть использован дважды');
+  }
+
+  if (tagsParsed.some(function (item) {
+    return item !== '' && !item.match(/#[A-zА-яЁё0-9]{0,20}/);
+  })) {
+    errors.push('Каждый хэш-тег должен начинаться с символа `#` (решётка) и состоять из одного слова.');
+  }
+
+  // выведение сообщения со всеми допущенными ошибками
+  if (errors.length > 0) {
+    hashtag.setCustomValidity(errors.join('\n'));
+    hashtag.checkValidity();
+  } else {
+    hashtag.setCustomValidity('');
+  }
+
+  // выделение красной рамкой поля хэш-тегов если значение не валидно
+  if (!hashtag.validity.valid) {
+    hashtag.style = 'border:2px solid red';
+  } else {
+    hashtag.attributes.style.value = '';
+  }
+
+  // выделение красной рамкой поля комментариев если значение не валидно
+  if (!formDescription.validity.valid) {
+    formDescription.style = 'border:2px solid red';
+  } else {
+    formDescription.attributes.style.value = '';
+  }
+});
 
