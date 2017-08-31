@@ -42,13 +42,14 @@
     galleryOverlayClose.addEventListener('click', onCloseClick);
   }
 
-  (function addHandlers() {
+  function addHandlers() {
     window.picturesList.addEventListener('click', onPictureClick);
     window.picturesList.addEventListener('keydown', function (evt) {
       if (evt.keyCode === window.data.KEY_CODES.ENTER) {
         onEnterPress(evt);
       }
     });
-  })();
+  }
+  addHandlers();
 
 })();

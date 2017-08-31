@@ -9,7 +9,7 @@
     var newPhoto = photoTemplate.cloneNode(true);
     newPhoto.querySelector('img').setAttribute('src', description.url);
     newPhoto.querySelector('.picture-likes').textContent = description.likes;
-    newPhoto.querySelector('.picture-comments').textContent = window.data.createRandomLengthArray().length;
+    newPhoto.querySelector('.picture-comments').textContent = description.comments.length;
     return newPhoto;
   }
 

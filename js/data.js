@@ -47,21 +47,21 @@
     return (amount === 1) ? comment : (PHOTO_COMMENTS[i] + ' ' + PHOTO_COMMENTS[j]);
   }
 
+  // создание массива комментариев переменной длины
+  function createRandomLengthArray () {
+    var comments = [];
+    var length = generateRandomNumber(0, 30);
+    for (var i = 0; i < length; i++) {
+      var comment = generateComment();
+      comments.push(comment);
+    }
+    return comments;
+  }
+
   window.data = {
     KEY_CODES: {
       ESC: 27,
       ENTER: 13
-    },
-
-    // создание массива комментариев переменной длины
-    createRandomLengthArray: function () {
-      var comments = [];
-      var length = generateRandomNumber(0, 30);
-      for (var i = 0; i < length; i++) {
-        var comment = generateComment();
-        comments.push(comment);
-      }
-      return comments;
     },
 
     // создание массива обьектов
@@ -72,7 +72,7 @@
         var object = {
           url: photos[i],
           likes: generateRandomNumber(15, 200),
-          comments: generateComment()
+          comments: createRandomLengthArray()
         };
         photoDescriptions.push(object);
       }

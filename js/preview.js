@@ -29,10 +29,12 @@
     uploadFormCancel.removeEventListener('keydown', closeFraming);
   }
 
-  (function manageFraming() {
+  function manageFraming() {
     uploadFile.addEventListener('change', openFraming);
     uploadFormCancel.addEventListener('click', closeFraming);
     document.querySelector('.upload-form-cancel').addEventListener('click', closeFraming);
-  })();
+  }
+
+  manageFraming();
 })();
 
