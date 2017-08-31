@@ -48,7 +48,7 @@
   }
 
   // создание массива комментариев переменной длины
-  function createRandomLengthArray () {
+  function createRandomLengthArray() {
     var comments = [];
     var length = generateRandomNumber(0, 30);
     for (var i = 0; i < length; i++) {
