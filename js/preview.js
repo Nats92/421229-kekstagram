@@ -12,6 +12,8 @@
 
   var uploadFormCancel = document.querySelector('.upload-form-cancel');
   function openFraming() {
+    window.effectLevel = document.querySelector('.upload-effect-level');
+    window.effectLevel.classList.add('hidden');
     uploadFile.classList.add('hidden');
     window.uploadOverlay.classList.remove('hidden');
     document.addEventListener('keydown', onEscapePress);
