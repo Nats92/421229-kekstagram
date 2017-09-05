@@ -184,11 +184,11 @@
     if ((filt === 'effect-chrome') || (filt === 'effect-sepia') || (filt === 'effect-marvin')) {
       expression = pin.offsetLeft / 455;
     }
-    if (filt === 'effect-phobos'){
+    if (filt === 'effect-phobos') {
       expression = pin.offsetLeft * (3 / 455) + 'px';
     }
     if (filt === 'effect-heat') {
-      expression = pin.offsetLeft * (3 / 455)
+      expression = pin.offsetLeft * (3 / 455);
     }
     return expression;
   }
