@@ -33,26 +33,39 @@
     return valueButton.setAttribute('value', valueNumber + '%');
   }
 
-  (function manageResize() {
+  function manageResize() {
     var incButton = window.uploadOverlay.querySelector('.upload-resize-controls-button-inc');
     var decButton = window.uploadOverlay.querySelector('.upload-resize-controls-button-dec');
     incButton.addEventListener('click', onIncreaseClick);
     decButton.addEventListener('click', onDecreaseClick);
-  })();
+  }
+  manageResize();
+  var levelLine = document.querySelector('.upload-effect-level-line');
+  var pin = levelLine.querySelector('.upload-effect-level-pin');
+  var val = levelLine.querySelector('.upload-effect-level-val');
 
   function onFilterClick(evt) {
+    effectImgPreview.removeAttribute('style');
     effectImgPreview.removeAttribute('class');
     effectImgPreview.setAttribute('class', 'effect-image-preview');
-    var name = evt.target.parentElement.htmlFor.replace('upload-', '');
-    effectImgPreview.classList.add(name);
+    pin.setAttribute('style', 'left: 91px');
+    val.style.width = '91px';
+    window.filterName = evt.target.parentElement.htmlFor.replace('upload-', '');
+    if (window.filterName !== 'effect-none') {
+      window.effectLevel.classList.remove('hidden');
+    } else {
+      window.effectLevel.classList.add('hidden');
+    }
+    changeFilterValue(window.filterName, filterVal(window.filterName));
   }
 
-  (function addHandler() {
+  function addHandler() {
     var uploadEffectPreview = document.querySelectorAll('.upload-effect-preview');
     for (var j = 0; j < uploadEffectPreview.length; j++) {
       uploadEffectPreview[j].addEventListener('click', onFilterClick);
     }
-  })();
+  }
+  addHandler();
 
   function testUnique(items) {
     for (var i = 0; i < items.length - 1; i++) {
@@ -128,5 +141,60 @@
 
     makeInvalidFieldRed();
   });
+
+  pin.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+// получение начальных координат с перемещением точки отсчета из левого верхнего угла в середину ползунка
+    var startCoords = {
+      x: evt.clientX - 0.5 * evt.currentTarget.clientWidth,
+      y: evt.clientY - 0.5 * evt.currentTarget.clientHeight
+    };
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+      var lineWidth = levelLine.clientWidth;
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y
+      };
+
+      var estimatedCoord = pin.offsetLeft - shift.x;
+      if (estimatedCoord < 0 || estimatedCoord > lineWidth) {
+        return;
+      }
+      pin.style.left = (pin.offsetLeft - shift.x) + 'px';
+      val.style.width = pin.style.left;
+      startCoords.x = moveEvt.clientX;
+
+      changeFilterValue(window.filterName, filterVal(window.filterName));
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
+
+  function filterVal(filt) {
+    var expression;
+    if ((filt === 'effect-chrome') || (filt === 'effect-sepia') || (filt === 'effect-marvin')) {
+      expression = pin.offsetLeft / 455;
+    }
+    if (filt === 'effect-phobos') {
+      expression = pin.offsetLeft * (3 / 455) + 'px';
+    }
+    if (filt === 'effect-heat') {
+      expression = pin.offsetLeft * (3 / 455);
+    }
+    return expression;
+  }
+
+  function changeFilterValue(filtName, filtVal) {
+    effectImgPreview.style = window.data.filterObj[filtName] + filtVal + ');';
+  }
 })();
 

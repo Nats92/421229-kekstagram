@@ -77,6 +77,13 @@
         photoDescriptions.push(object);
       }
       return photoDescriptions;
+    },
+    filterObj: {
+      'effect-chrome': 'filter: grayscale(',
+      'effect-sepia': 'filter: sepia(',
+      'effect-marvin': 'filter: invert(',
+      'effect-phobos': 'filter: blur(',
+      'effect-heat': 'filter: brightness('
     }
   };
 })();
