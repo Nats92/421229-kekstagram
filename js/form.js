@@ -56,7 +56,7 @@
     } else {
       window.effectLevel.classList.add('hidden');
     }
-    changeFilterValue(window.filterName, filterVal(window.filterName));
+    changeFilterValue(window.filterName, window.data.filterObj[window.filterName].defaultVal);
   }
 
   function addHandler() {
@@ -152,21 +152,20 @@
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
-      var lineWidth = levelLine.clientWidth;
+      window.lineWidth = levelLine.clientWidth;
       var shift = {
         x: startCoords.x - moveEvt.clientX,
         y: startCoords.y
       };
 
       var estimatedCoord = pin.offsetLeft - shift.x;
-      if (estimatedCoord < 0 || estimatedCoord > lineWidth) {
+      if (estimatedCoord < 0 || estimatedCoord > window.lineWidth) {
         return;
       }
       pin.style.left = (pin.offsetLeft - shift.x) + 'px';
       val.style.width = pin.style.left;
       startCoords.x = moveEvt.clientX;
-
-      changeFilterValue(window.filterName, filterVal(window.filterName));
+      changeFilterValue(window.filterName, window.data.filterObj[window.filterName].filterVal(pin.offsetLeft));
     };
 
     var onMouseUp = function (upEvt) {
@@ -179,22 +178,8 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
-  function filterVal(filt) {
-    var expression;
-    if ((filt === 'effect-chrome') || (filt === 'effect-sepia') || (filt === 'effect-marvin')) {
-      expression = pin.offsetLeft / 455;
-    }
-    if (filt === 'effect-phobos') {
-      expression = pin.offsetLeft * (3 / 455) + 'px';
-    }
-    if (filt === 'effect-heat') {
-      expression = pin.offsetLeft * (3 / 455);
-    }
-    return expression;
-  }
-
   function changeFilterValue(filtName, filtVal) {
-    effectImgPreview.style = window.data.filterObj[filtName] + filtVal + ');';
+    effectImgPreview.style = window.data.filterObj[filtName].name.replace('%', filtVal);
   }
 })();
 
