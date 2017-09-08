@@ -77,43 +77,6 @@
         photoDescriptions.push(object);
       }
       return photoDescriptions;
-    },
-    filterObj: {
-      'effect-chrome': {
-        name: 'filter: grayscale(%);',
-        defaultVal: 0.2,
-        filterVal: function (pinOfsL) {
-          return pinOfsL / window.lineWidth;
-        }
-      },
-      'effect-sepia': {
-        name: 'filter: sepia(%);',
-        defaultVal: 0.2,
-        filterVal: function (pinOfsL) {
-          return pinOfsL / window.lineWidth;
-        }
-      },
-      'effect-marvin': {
-        name: 'filter: invert(%);',
-        defaultVal: 0.2,
-        filterVal: function (pinOfsL) {
-          return pinOfsL / window.lineWidth;
-        }
-      },
-      'effect-phobos': {
-        name: 'filter: blur(%);',
-        defaultVal: '0.6px',
-        filterVal: function (pinOfsL) {
-          return pinOfsL * (3 / window.lineWidth) + 'px';
-        }
-      },
-      'effect-heat': {
-        name: 'filter: brightness(%);',
-        defaultVal: 0.6,
-        filterVal: function (pinOfsL) {
-          return pinOfsL * (3 / window.lineWidth);
-        }
-      }
     }
   };
 })();
