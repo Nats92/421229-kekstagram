@@ -2,6 +2,7 @@
 
 (function () {
   var galleryOverlay = document.querySelector('.gallery-overlay');
+  var picturesList = document.querySelector('.pictures');
 
   function onEscPress(evt) {
     if (evt.keyCode === window.data.KEY_CODES.ESC) {
@@ -43,8 +44,8 @@
   }
 
   function addHandlers() {
-    window.picturesList.addEventListener('click', onPictureClick);
-    window.picturesList.addEventListener('keydown', function (evt) {
+    picturesList.addEventListener('click', onPictureClick);
+    picturesList.addEventListener('keydown', function (evt) {
       if (evt.keyCode === window.data.KEY_CODES.ENTER) {
         onEnterPress(evt);
       }

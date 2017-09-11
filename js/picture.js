@@ -2,7 +2,6 @@
 
 (function () {
   var photoTemplate = document.querySelector('#picture-template').content;
-  var descriptions = window.data.createArrayOfDescriptions();
 
 // создание картинки по образцу
   function createNewPhoto(description) {
@@ -13,15 +12,20 @@
     return newPhoto;
   }
 
-  document.querySelector('.upload-overlay').classList.add('hidden');
+  function successHandler(photos) {
+    var fragment = document.createDocumentFragment();
+    for (var i = 0; i < photos.length; i++) {
+      fragment.appendChild(createNewPhoto(photos[i]));
+    }
+    document.querySelector('.pictures').appendChild(fragment);
+  }
+  function errorHandler(errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'position: absolute; z-index: 100; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); text-align: center; padding-top: 100px; box-sizing: border-box; font-size: 40px; color: #ff0000';
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  }
 
 // Выведение картинок на страницу
-  (function addFragment() {
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < descriptions.length; i++) {
-      fragment.appendChild(createNewPhoto(descriptions[i]));
-    }
-    window.picturesList = document.querySelector('.pictures');
-    window.picturesList.appendChild(fragment);
-  })();
+  window.backend.load(successHandler, errorHandler);
 })();
