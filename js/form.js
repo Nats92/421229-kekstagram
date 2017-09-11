@@ -100,8 +100,6 @@
     document.getElementById('upload-effect-none').checked = true;
     document.querySelector('.effect-image-preview').style.filter = '';
     window.resetScale();
-    // document.querySelector('.effect-image-preview').style.transform = 'scale(1)';
-    // document.querySelector('.upload-resize-controls-value').value = '100%';
     document.querySelector('#upload-file').value = '';
     evt.preventDefault();
   });

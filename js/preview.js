@@ -7,7 +7,7 @@
     ESC: 27,
     ENTER: 13
   };
-  
+
   function onEscapePress(evt) {
     if ((evt.keyCode === window.data.KEY_CODES.ESC) && (evt.target.className !== 'upload-form-description')) {
       closeFraming();

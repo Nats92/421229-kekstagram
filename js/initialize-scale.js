@@ -10,7 +10,8 @@
   var decButton = window.uploadOverlay.querySelector('.upload-resize-controls-button-dec');
 
   window.resetScale = function () {
-    valueButton.value = '100%';
+    valueNumber = 100;
+    valueButton.value = valueNumber + '%';
     document.querySelector('.effect-image-preview').style.transform = 'scale(1)';
   };
   window.initializeScale = function (scaleElement, callback) {
