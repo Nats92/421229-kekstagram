@@ -9,7 +9,7 @@
   };
 
   function onEscapePress(evt) {
-    if ((evt.keyCode === window.data.KEY_CODES.ESC) && (evt.target.className !== 'upload-form-description')) {
+    if ((evt.keyCode === window.KEY_CODES.ESC) && (evt.target.className !== 'upload-form-description')) {
       closeFraming();
     }
   }
@@ -22,7 +22,7 @@
     window.uploadOverlay.classList.remove('hidden');
     document.addEventListener('keydown', onEscapePress);
     uploadFormCancel.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === window.data.KEY_CODES.ENTER) {
+      if (evt.keyCode === window.KEY_CODES.ENTER) {
         closeFraming();
       }
     });

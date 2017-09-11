@@ -93,10 +93,17 @@
   }
   init();
 
+  function errorHandler(errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'position: absolute; z-index: 100; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); text-align: center; padding-top: 100px; box-sizing: border-box; font-size: 40px; color: #ff0000';
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  }
+
   uploadForm.addEventListener('submit', function (evt) {
     window.backend.save(new FormData(uploadForm), function () {
       window.uploadOverlay.classList.add('hidden');
-    });
+    }, errorHandler);
     document.getElementById('upload-effect-none').checked = true;
     document.querySelector('.effect-image-preview').style.filter = '';
     window.resetScale();

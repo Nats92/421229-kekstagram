@@ -5,7 +5,7 @@
   var picturesList = document.querySelector('.pictures');
 
   function onEscPress(evt) {
-    if (evt.keyCode === window.data.KEY_CODES.ESC) {
+    if (evt.keyCode === window.KEY_CODES.ESC) {
       onCloseClick();
     }
   }
@@ -36,7 +36,7 @@
     galleryOverlay.classList.remove('hidden');
     document.addEventListener('keydown', onEscPress);
     galleryOverlayClose.addEventListener('keydown', function () {
-      if (evt.keyCode === window.data.KEY_CODES.ENTER) {
+      if (evt.keyCode === window.KEY_CODES.ENTER) {
         onCloseClick();
       }
     });
@@ -46,7 +46,7 @@
   function addHandlers() {
     picturesList.addEventListener('click', onPictureClick);
     picturesList.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === window.data.KEY_CODES.ENTER) {
+      if (evt.keyCode === window.KEY_CODES.ENTER) {
         onEnterPress(evt);
       }
     });
