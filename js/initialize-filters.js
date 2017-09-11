@@ -8,10 +8,7 @@
   window.filterObj = {
     'effect-none': {
       name: '',
-      defaultVal: '',
-      filterVal: function (pinOfsL, elWidth) {
-        return pinOfsL / elWidth;
-      }
+      defaultVal: ''
     },
     'effect-chrome': {
       name: 'grayscale(%)',

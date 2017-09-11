@@ -11,28 +11,28 @@
       }
     } return true;
   }
-
-  var hashtag = document.querySelector('.upload-form-hashtags');
-  var formDescription = document.querySelector('.upload-form-description');
+  var uploadForm = document.getElementById('upload-select-image');
+  var hashtag = uploadForm.querySelector('.upload-form-hashtags');
+  var formDescription = uploadForm.querySelector('.upload-form-description');
 
   // выделение красной рамкой если значение не валидно
   function makeInvalidFieldRed() {
      // для поля хэш-тегов
     if (!hashtag.validity.valid) {
-      hashtag.style = 'border:2px solid red';
+      hashtag.style.border = '2px solid red';
     } else {
-      hashtag.attributes.style.value = '';
+      hashtag.style.border = '';
     }
 
     // для поля комментариев
     if (!formDescription.validity.valid) {
-      formDescription.style = 'border:2px solid red';
+      formDescription.style.border = '2px solid red';
     } else {
-      formDescription.attributes.style.value = '';
+      formDescription.style.border = '';
     }
   }
 
-  document.getElementById('upload-select-image').addEventListener('input', function (evt) {
+  uploadForm.addEventListener('input', function (evt) {
     var errors = [];
     var tagsParsed = hashtag.value.split(' ');
 
@@ -92,5 +92,23 @@
     window.initializeFilters(window.effectImgPreview.style.filter, setFilterValue);
   }
   init();
+
+  function errorHandler(errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'position: absolute; z-index: 100; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); text-align: center; padding-top: 100px; box-sizing: border-box; font-size: 40px; color: #ff0000';
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  }
+
+  uploadForm.addEventListener('submit', function (evt) {
+    window.backend.save(new FormData(uploadForm), function () {
+      window.uploadOverlay.classList.add('hidden');
+    }, errorHandler);
+    document.getElementById('upload-effect-none').checked = true;
+    document.querySelector('.effect-image-preview').style.filter = '';
+    window.resetScale();
+    document.querySelector('#upload-file').value = '';
+    evt.preventDefault();
+  });
 })();
 
