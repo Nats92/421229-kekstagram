@@ -1,7 +1,13 @@
 'use strict';
 
 (function () {
-
+  window.uploadFile = document.querySelector('#upload-file');
+  window.uploadOverlay = document.querySelector('.upload-overlay');
+  window.KEY_CODES = {
+    ESC: 27,
+    ENTER: 13
+  };
+  
   function onEscapePress(evt) {
     if ((evt.keyCode === window.data.KEY_CODES.ESC) && (evt.target.className !== 'upload-form-description')) {
       closeFraming();
@@ -36,11 +42,5 @@
   }
 
   manageFraming();
-  window.uploadFile = document.querySelector('#upload-file');
-  window.uploadOverlay = document.querySelector('.upload-overlay');
-  window.KEY_CODES = {
-    ESC: 27,
-    ENTER: 13
-  };
 })();
 
