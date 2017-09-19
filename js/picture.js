@@ -32,7 +32,6 @@
     }
     document.querySelector('.pictures').appendChild(fragment);
   };
-  
   window.backend.load(successHandler, errorHandler);
 
 })();
