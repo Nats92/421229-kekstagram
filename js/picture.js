@@ -10,13 +10,6 @@
     newPhoto.querySelector('.picture-comments').textContent = description.comments.length;
     return newPhoto;
   }
-  window.createNewFragment = function (photosArray) {
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < photosArray.length; i++) {
-      fragment.appendChild(createNewPhoto(photosArray[i]));
-    }
-    document.querySelector('.pictures').appendChild(fragment);
-  };
 
   function successHandler(data) {
     window.photos = data;
@@ -32,6 +25,14 @@
   }
 
 // Выведение картинок на страницу
+  window.createNewFragment = function (photosArray) {
+    var fragment = document.createDocumentFragment();
+    for (var i = 0; i < photosArray.length; i++) {
+      fragment.appendChild(createNewPhoto(photosArray[i]));
+    }
+    document.querySelector('.pictures').appendChild(fragment);
+  };
+  
   window.backend.load(successHandler, errorHandler);
 
 })();

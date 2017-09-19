@@ -5,6 +5,16 @@
   var pin = levelLine.querySelector('.upload-effect-level-pin');
   var val = levelLine.querySelector('.upload-effect-level-val');
 
+  function defaultingPin(isHide) {
+    var DEFAULT_OFFSET = '91px';
+    pin.style.left = DEFAULT_OFFSET;
+    val.style.width = DEFAULT_OFFSET;
+    if (isHide) {
+      window.effectLevel.classList.add('hidden');
+    } else {
+      window.effectLevel.classList.remove('hidden');
+    }
+  }
   window.filterObj = {
     'effect-none': {
       name: '',
@@ -46,17 +56,6 @@
       }
     }
   };
-
-  function defaultingPin(isHide) {
-    var DEFAULT_OFFSET = '91px';
-    pin.style.left = DEFAULT_OFFSET;
-    val.style.width = DEFAULT_OFFSET;
-    if (isHide) {
-      window.effectLevel.classList.add('hidden');
-    } else {
-      window.effectLevel.classList.remove('hidden');
-    }
-  }
 
   window.initializeFilters = function (element, callback) {
     if (element !== window.filterName) {
