@@ -1,12 +1,12 @@
 'use strict';
 
 (function () {
-  window.uploadFile = document.querySelector('#upload-file');
-  window.uploadOverlay = document.querySelector('.upload-overlay');
   window.KEY_CODES = {
     ESC: 27,
     ENTER: 13
   };
+  window.uploadFile = document.querySelector('#upload-file');
+  window.uploadOverlay = document.querySelector('.upload-overlay');
 
   function onEscapePress(evt) {
     if ((evt.keyCode === window.KEY_CODES.ESC) && (evt.target.className !== 'upload-form-description')) {
@@ -14,14 +14,14 @@
     }
   }
 
-  var uploadFormCancel = document.querySelector('.upload-form-cancel');
+  var uploadFormCancelButton = document.querySelector('.upload-form-cancel');
   function openFraming() {
     window.effectLevel = document.querySelector('.upload-effect-level');
     window.effectLevel.classList.add('hidden');
     window.uploadFile.classList.add('hidden');
     window.uploadOverlay.classList.remove('hidden');
     document.addEventListener('keydown', onEscapePress);
-    uploadFormCancel.addEventListener('keydown', function (evt) {
+    uploadFormCancelButton.addEventListener('keydown', function (evt) {
       if (evt.keyCode === window.KEY_CODES.ENTER) {
         closeFraming();
       }
@@ -32,15 +32,14 @@
     window.uploadOverlay.classList.add('hidden');
     window.uploadFile.classList.remove('hidden');
     document.removeEventListener('keydown', onEscapePress);
-    uploadFormCancel.removeEventListener('keydown', closeFraming);
+    uploadFormCancelButton.removeEventListener('keydown', closeFraming);
   }
 
   function manageFraming() {
     window.uploadFile.addEventListener('change', openFraming);
-    uploadFormCancel.addEventListener('click', closeFraming);
+    uploadFormCancelButton.addEventListener('click', closeFraming);
     document.querySelector('.upload-form-cancel').addEventListener('click', closeFraming);
   }
-
   manageFraming();
 })();
 
