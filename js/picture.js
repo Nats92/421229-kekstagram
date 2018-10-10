@@ -10,10 +10,18 @@
     newPhoto.querySelector('.picture-comments').textContent = description.comments.length;
     return newPhoto;
   }
+  // Выведение картинок на страницу
+  function createNewFragment(photosArray) {
+    var fragment = document.createDocumentFragment();
+    for (var i = 0; i < photosArray.length; i++) {
+      fragment.appendChild(createNewPhoto(photosArray[i]));
+    }
+    document.querySelector('.pictures').appendChild(fragment);
+  }
 
   function successHandler(data) {
     window.photos = data;
-    window.createNewFragment(window.photos);
+    createNewFragment(window.photos);
     document.querySelector('.filters').classList.remove('hidden');
   }
 
@@ -23,15 +31,6 @@
     node.textContent = errorMessage;
     document.body.insertAdjacentElement('afterbegin', node);
   }
-
-// Выведение картинок на страницу
-  window.createNewFragment = function (photosArray) {
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < photosArray.length; i++) {
-      fragment.appendChild(createNewPhoto(photosArray[i]));
-    }
-    document.querySelector('.pictures').appendChild(fragment);
-  };
   window.backend.load(successHandler, errorHandler);
 
 })();

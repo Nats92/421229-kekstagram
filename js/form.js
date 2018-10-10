@@ -4,6 +4,7 @@
   var uploadForm = document.querySelector('#upload-select-image');
   var hashtag = uploadForm.querySelector('.upload-form-hashtags');
   var formDescription = uploadForm.querySelector('.upload-form-description');
+  var uploadFormCancel = uploadForm.querySelector('.upload-form-cancel');
 
   function testUnique(arr) {
     var iMax = arr.length;
@@ -88,16 +89,24 @@
     document.body.insertAdjacentElement('afterbegin', node);
   }
 
-  uploadForm.addEventListener('submit', function (evt) {
-    window.backend.save(new FormData(uploadForm), function () {
-      window.uploadOverlay.classList.add('hidden');
-    }, errorHandler);
+  function resetForm() {
     document.querySelector('#upload-effect-none').checked = true;
     document.querySelector('.effect-image-preview').style.filter = '';
     uploadForm.reset();
     window.resetScale();
     document.querySelector('#upload-file').value = '';
+  }
+
+  uploadForm.addEventListener('submit', function (evt) {
+    window.backend.save(new FormData(uploadForm), function () {
+      window.uploadOverlay.classList.add('hidden');
+    }, errorHandler);
+    resetForm();
     evt.preventDefault();
   });
+
+  uploadFormCancel.addEventListener('click', function () {
+    resetForm();
+  })
 })();
 
